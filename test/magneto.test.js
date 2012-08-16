@@ -181,4 +181,66 @@ describe('Magneto @func', function(){
             });
         });
     });
+
+    describe('Get Batch', function(){
+        it('should handle batch get item', function(done){
+            sequence().then(function(next){
+                // Create a table
+                db.add({
+                    'name': "myTable",
+                    'schema': {
+                        'username': String
+                    },
+                    'throughput': {
+                        'read': 1000,
+                        'write': 10
+                    }
+                }).save(function(err, table){
+                    assert.ifError(err);
+                    next();
+                });
+            }).then(function(next){
+                db.get('myTable').put({
+                    'username': 'dan',
+                    'email': 'dan@ex.fm'
+                }).save(function(err, data){
+                    assert.ifError(err);
+                    next();
+                });
+            }).then(function(next){
+                db.get('myTable').put({
+                    'username': 'lucas',
+                    'email': 'lucas@ex.fm'
+                }).save(function(err, data){
+                    assert.ifError(err);
+                    next();
+                });
+            }).then(function(next){
+                db.get('myTable').put({
+                    'username': 'jm',
+                    'email': 'jm@ex.fm'
+                }).save(function(err, data){
+                    assert.ifError(err);
+                    next();
+                });
+            }).then(function(next){
+                db.get(function(){
+                    this.get("myTable", [{
+                        'username': 'lucas'
+                    }, {
+                        'username': 'jm'
+                    }]);
+                }).fetch(function(err, data){
+                    assert.ifError(err);
+
+                    assert.equal(data.myTable[0].username, 'lucas');
+                    assert.equal(data.myTable[0].email, 'lucas@ex.fm');
+                    assert.equal(data.myTable[1].username, 'jm');
+                    assert.equal(data.myTable[1].email, 'jm@ex.fm');
+
+                    done();
+                });
+            });
+        });
+    });
 });
