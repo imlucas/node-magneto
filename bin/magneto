@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+var server = require('../lib/server'),
+    args = process.argv.slice(1),
+    port = (args.length > 1) ? ~~args[1] : 8080;
+
+server.listen(port, function(){
+    console.log('Magneto listening on ' + port);
+});
