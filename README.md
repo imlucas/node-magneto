@@ -1,6 +1,6 @@
 # Magneto
 
-A port of [fake dynamo](https://github.com/SaturnPolly/fake_dynamo) to node.js.
+A port of [fake dynamo](https://github.com/ananthakumaran/fake_dynamo) to node.js.
 
 Still very much a work in progress, but functional for our purposes.
 
