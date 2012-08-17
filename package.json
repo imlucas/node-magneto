@@ -8,6 +8,14 @@
     "type": "git",
     "url": "git://github.com/exfm/node-magneto.git"
   },
+  "keywords": [
+    "amazon",
+    "aws",
+    "DynamoDB",
+    "dynamo",
+    "nosql",
+    "database"
+  ],
   "bin": {
     "magneto": "./bin/magneto"
   },

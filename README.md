@@ -2,10 +2,14 @@
 
 A port of [fake dynamo](https://github.com/SaturnPolly/fake_dynamo) to node.js.
 
+Still very much a work in progress, but functional for our purposes.
+
 ## Todo
- * BatchGetItem
- * BatchWriteItem
  * More tests
+
+## Install
+
+    npm install -g magneto
 
 ## Usage
 
