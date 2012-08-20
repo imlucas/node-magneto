@@ -2,7 +2,7 @@
   "author": "Lucas Hrabovsky <lucas@ex.fm> (http://imlucas.com)",
   "name": "magneto",
   "description": "A DynamoDB backend in node for testing",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "http://github.com/exfm/node-magneto",
   "repository": {
     "type": "git",
@@ -21,12 +21,14 @@
   },
   "dependencies": {
     "nub": "0.0.0",
-    "restify": "1.4.4"
+    "restify": "1.4.4",
+    "bunyan": "0.13.0"
   },
   "devDependencies": {
     "sequence": "2.2.1",
     "mocha": "1.3.2",
-    "dynamo": "git://github.com/exfm/dynamo.git"
+    "dynamo": "git://github.com/exfm/dynamo.git",
+    "when": "1.4.2"
   },
   "optionalDependencies": {},
   "engines": {

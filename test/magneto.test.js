@@ -1,7 +1,8 @@
 "use strict";
 
 var assert = require("assert"),
-    sequence = require('sequence');
+    sequence = require('sequence'),
+    when = require('when');
 
 var dynamo = require('dynamo'),
     client = dynamo.createClient();
@@ -372,5 +373,61 @@ describe('Magneto @func', function(){
             });
         });
     });
+    describe('Scan', function(){
+        var createScanData = function(){
+            var d = when.defer();
+            sequence().then(function(next){
+                db.add({
+                    'name': "myTable",
+                    'schema': {
+                        'username': String
+                    },
+                    'throughput': {
+                        'read': 1000,
+                        'write': 10
+                    }
+                }).save(function(err, table){
+                    assert.ifError(err);
+                    next();
+                });
+            }).then(function(next){
+                db.get(function(){
+                    this.put("myTable", [
+                        {
+                            'username': 'lucas',
+                            'email': 'lucas@ex.fm',
+                            'admin': 1
+                        },
+                        {
+                            'username': 'jm',
+                            'email': 'jm@ex.fm'
+                        }
+                    ]);
+                }).save(function(err, data){
+                    assert.ifError(err);
+                    d.resolve();
+                });
+            });
+            return d.promise;
+        };
+        it('should return all with no conditions', function(done){
+            createScanData().then(function(next){
+                db.get("myTable").scan().fetch(function(err, data){
+                    assert.ifError(err);
+                    assert.equal(data.length, 2, "Should return 2 users");
+                    done();
+                });
+            });
+        });
 
+        it('should return all with NOT_NULL on hash', function(done){
+            createScanData().then(function(next){
+                db.get("myTable").scan({'username': {"!=": null}}).fetch(function(err, data){
+                    assert.ifError(err);
+                    assert.equal(data.length, 2, "Should return 2 users");
+                    done();
+                });
+            });
+        });
+    });
 });
