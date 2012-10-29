@@ -2,12 +2,13 @@
   "author": "Lucas Hrabovsky <lucas@ex.fm> (http://imlucas.com)",
   "name": "magneto",
   "description": "A DynamoDB backend in node for testing",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "homepage": "http://github.com/exfm/node-magneto",
   "repository": {
     "type": "git",
     "url": "git://github.com/exfm/node-magneto.git"
   },
+  "main": "index.js",
   "keywords": [
     "amazon",
     "aws",
@@ -21,7 +22,7 @@
   },
   "dependencies": {
     "nub": "0.0.0",
-    "restify": "1.4.4",
+    "express": "3.0.0",
     "bunyan": "0.13.0"
   },
   "devDependencies": {

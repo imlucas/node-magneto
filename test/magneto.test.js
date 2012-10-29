@@ -9,11 +9,28 @@ var dynamo = require('dynamo'),
 
 client.useSession = false;
 
+var connected = false,
+    magneto = require('../'),
+    bunyan = require('bunyan');
+
+magneto.setLogLevel(bunyan.ERROR);
+
 var db = client.get('us-east-1');
     db.host = 'localhost';
     db.port = 8080;
 
 describe('Magneto @func', function(){
+    beforeEach(function(done){
+        if(connected === false){
+            magneto.listen(8080, function(){
+                connected = true;
+                done();
+            });
+        }
+        else{
+            done();
+        }
+    });
     afterEach(function(done){
         db.get('myTable').destroy(function(err){
             done();
