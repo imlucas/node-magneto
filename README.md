@@ -4,18 +4,22 @@
 
 A port of [fake dynamo](https://github.com/ananthakumaran/fake_dynamo) to node.js.
 
-Still very much a work in progress, but functional for our purposes.
-
-## Todo
- * More tests
+Very handy for just getting to know dynamo or making your tests easier to deal with.
 
 ## Install
 
     npm install -g magneto
 
+## Test
+
+    npm test
+
 ## Usage
 
-    ./magneto <port>
+    magneto <port>
+
+## Todo
+[see issues](https://github.com/exfm/node-magneto/issues)
 
 
 Use [exfm's dynamo fork](https://github.com/exfm/dynamo).
