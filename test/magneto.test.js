@@ -403,11 +403,15 @@ describe('Magneto @func', function(){
                         {
                             'username': 'lucas',
                             'email': 'lucas@ex.fm',
-                            'admin': 1
+                            'admin': 1,
+                            'followers': 0,
+                            'loved': [1,2]
                         },
                         {
                             'username': 'jm',
-                            'email': 'jm@ex.fm'
+                            'email': 'jm@ex.fm',
+                            'followers': 10,
+                            'loved': [3]
                         }
                     ]);
                 }).save(function(err, data){
@@ -436,5 +440,112 @@ describe('Magneto @func', function(){
                 });
             });
         });
+
+        it("should suppport EQ", function(done){
+            createScanData().then(function(next){
+                db.get("myTable").scan({'email': {"==": 'lucas@ex.fm'}}).fetch(function(err, data){
+                    assert.ifError(err);
+                    assert.equal(data.length, 1);
+                    done();
+                });
+            });
+        });
+
+        it("should suppport GT", function(done){
+            createScanData().then(function(next){
+                db.get("myTable").scan({'followers': {">": '0'}}).fetch(function(err, data){
+                    assert.ifError(err);
+                    assert.equal(data.length, 1);
+                    done();
+                });
+            });
+        });
+
+        it("should suppport GE", function(done){
+            createScanData().then(function(next){
+                db.get("myTable").scan({'followers': {">=": '10'}}).fetch(function(err, data){
+                    assert.ifError(err);
+                    assert.equal(data.length, 1);
+                    done();
+                });
+            });
+        });
+
+        it("should suppport LT", function(done){
+            createScanData().then(function(next){
+                db.get("myTable").scan({'followers': {"<": '10'}}).fetch(function(err, data){
+                    assert.ifError(err);
+                    assert.equal(data.length, 1);
+                    done();
+                });
+            });
+        });
+
+        it("should suppport LE", function(done){
+            createScanData().then(function(next){
+                db.get("myTable").scan({'followers': {"<=": '0'}}).fetch(function(err, data){
+                    assert.ifError(err);
+                    assert.equal(data.length, 1);
+                    done();
+                });
+            });
+        });
+
+        it("should suppport NE", function(done){
+            createScanData().then(function(next){
+                db.get("myTable").scan({'followers': {"!=": '0'}}).fetch(function(err, data){
+                    assert.ifError(err);
+                    assert.equal(data.length, 1);
+                    assert.equal(data[0].username, 'jm');
+                    done();
+                });
+            });
+        });
+
+        it("should suppport BEGINS_WITH", function(done){
+            createScanData().then(function(next){
+                db.get("myTable").scan({'username': {'startsWith': 'lu'}}).fetch(function(err, data){
+                    assert.ifError(err);
+                    assert.equal(data.length, 1);
+                    assert.equal(data[0].username, 'lucas');
+                    done();
+                });
+            });
+        });
+
+        it("should suppport CONTAINS", function(done){
+            createScanData().then(function(next){
+                db.get("myTable").scan({'username': {'contains': 'ucas'}}).fetch(function(err, data){
+                    assert.ifError(err);
+                    assert.equal(data.length, 1);
+                    done();
+                });
+            });
+        });
+
+        it("should suppport NOT_CONTAINS", function(done){
+            createScanData().then(function(next){
+                db.get("myTable").scan({'username': {'!contains': 'ucas'}}).fetch(function(err, data){
+                    assert.ifError(err);
+                    assert.equal(data.length, 1);
+                    assert.equal(data[0].username, 'jm');
+                    done();
+                });
+            });
+        });
+
+        it("should suppport BETWEEN", function(done){
+            createScanData().then(function(next){
+                db.get("myTable").scan({'followers': {">=": [5, 15]}}).fetch(function(err, data){
+                    assert.ifError(err);
+                    assert.equal(data.length, 1);
+                    assert.equal(data[0].username, 'jm');
+                    done();
+                });
+            });
+        });
+
+
+
     });
 });
