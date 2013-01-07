@@ -1,5 +1,7 @@
 # Magneto
 
+[![Build Status](https://secure.travis-ci.org/exfm/node-magneto.png)](http://travis-ci.org/exfm/node-magneto)
+
 A port of [fake dynamo](https://github.com/ananthakumaran/fake_dynamo) to node.js.
 
 Still very much a work in progress, but functional for our purposes.
