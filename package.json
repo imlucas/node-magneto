@@ -17,6 +17,9 @@
     "nosql",
     "database"
   ],
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
   "bin": {
     "magneto": "./bin/magneto"
   },
@@ -27,7 +30,7 @@
   },
   "devDependencies": {
     "sequence": "2.2.1",
-    "mocha": "1.3.2",
+    "mocha": "1.7.4",
     "dynamo": "git://github.com/exfm/dynamo.git",
     "when": "1.4.2"
   },

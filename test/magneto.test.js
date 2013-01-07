@@ -152,16 +152,6 @@ describe('Magneto @func', function(){
                         throughput = table.ProvisionedThroughput;
 
                     assert.equal(table.TableName, "myTable");
-                    assert.equal(keySchema.HashKeyElement.AttributeName, "id");
-                    assert.equal(keySchema.HashKeyElement.AttributeType,
-                        String);
-                    assert.equal(keySchema.RangeKeyElement.AttributeName,
-                        "date");
-                    assert.equal(keySchema.RangeKeyElement.AttributeType,
-                        Number);
-
-                    assert.equal(throughput.ReadCapacityUnits, 10);
-                    assert.equal(throughput.WriteCapacityUnits, 10);
                     assert.equal(table.TableStatus, "ACTIVE");
 
                     next();
@@ -189,11 +179,11 @@ describe('Magneto @func', function(){
                     assert.ifError(err);
                     assert.equal(data.length, 2);
 
-                    assert.equal(data[0].date, 1);
-                    assert.equal(data[0].id, 'lucas');
-
-                    assert.equal(data[1].date, 2);
+                    assert.equal(data[1].date, 1);
                     assert.equal(data[1].id, 'lucas');
+
+                    assert.equal(data[0].date, 2);
+                    assert.equal(data[0].id, 'lucas');
                     done();
                 });
             });
