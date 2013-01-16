@@ -179,11 +179,11 @@ describe('Magneto @func', function(){
                     assert.ifError(err);
                     assert.equal(data.length, 2);
 
-                    assert.equal(data[1].date, 1);
-                    assert.equal(data[1].id, 'lucas');
-
-                    assert.equal(data[0].date, 2);
+                    assert.equal(data[0].date, 1);
                     assert.equal(data[0].id, 'lucas');
+
+                    assert.equal(data[1].date, 2);
+                    assert.equal(data[1].id, 'lucas');
                     done();
                 });
             });
