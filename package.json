@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "nub": "0.0.0",
-    "express": "3.0.0",
+    "express": "3.1.0",
     "plog": "0.0.4"
   },
   "devDependencies": {
