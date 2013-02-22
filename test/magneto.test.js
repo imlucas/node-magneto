@@ -132,6 +132,74 @@ describe('Magneto @func', function(){
                 });
             });
         });
+
+        it("should raise a validation error trying to insert duplicates in a string set", function(done){
+            sequence().then(function(next){
+                // Create a table
+                db.add({
+                    'name': "myTable",
+                    'schema': {
+                        'id': String,
+                        'date': Number
+                    },
+                    'throughput': {
+                        'read': 10,
+                        'write': 10
+                    }
+                }).save(function(err, table){
+                    assert.ifError(err);
+                    next();
+                });
+            }).then(function(next){
+                db.get('myTable').put({
+                    'id': 'lucas', 'date': 1,
+                    "tags": ["electronic", "electronic"]
+                }).save(function(err, data){
+                    assert.equal(err.name, 'com.amazonaws.dynamodb.v20111205#ValidationException');
+                    assert.equal(err.statusCode, 400);
+                    done();
+                });
+            });
+        });
+
+        it("should raise a validation error trying to update a string set with duplicates", function(done){
+            sequence().then(function(next){
+                // Create a table
+                db.add({
+                    'name': "myTable",
+                    'schema': {
+                        'id': String,
+                        'date': Number
+                    },
+                    'throughput': {
+                        'read': 10,
+                        'write': 10
+                    }
+                }).save(function(err, table){
+                    assert.ifError(err);
+                    next();
+                });
+            }).then(function(next){
+                db.get('myTable').put({
+                    'id': 'lucas',
+                    'date': 1,
+                    "tags": ["electronic", "rock", "pop"]
+                }).save(function(err, data){
+                    next();
+                });
+            })
+            .then(function(next){
+                db.get('myTable').get({'id': 'lucas', 'date': 1}).update(function(){
+                    this.add("tags", ["electronic"]);
+                }).save(function(err, data){
+                    assert.equal(err.name, 'com.amazonaws.dynamodb.v20111205#ValidationException');
+                    assert.equal(err.statusCode, 400);
+                    done();
+                });
+            });
+        });
+
+
     });
 
     describe('Query', function(){
