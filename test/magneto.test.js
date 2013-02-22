@@ -2,7 +2,8 @@
 
 var assert = require("assert"),
     sequence = require('sequence'),
-    when = require('when');
+    when = require('when'),
+    plog = require('plog');
 
 var dynamo = require('dynamo'),
     client = dynamo.createClient();
@@ -10,14 +11,17 @@ var dynamo = require('dynamo'),
 client.useSession = false;
 
 var connected = false,
-    magneto = require('../'),
-    bunyan = require('bunyan');
-
-magneto.setLogLevel(bunyan.ERROR);
+    magneto = require('../');
 
 var db = client.get('us-east-1');
     db.host = 'localhost';
     db.port = 8080;
+
+plog.find(/magneto*/)
+    .file('magneto-test.log')
+    .level('silly')
+    .remove('console');
+
 
 describe('Magneto @func', function(){
     beforeEach(function(done){

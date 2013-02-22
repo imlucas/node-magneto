@@ -26,7 +26,7 @@
   "dependencies": {
     "nub": "0.0.0",
     "express": "3.0.0",
-    "bunyan": "0.13.0"
+    "plog": "0.0.4"
   },
   "devDependencies": {
     "sequence": "2.2.1",
