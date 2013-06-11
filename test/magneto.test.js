@@ -38,6 +38,33 @@ function createTable(done){
     dynamo.createTable(params, done);
 }
 
+function createUser(username, email, done){
+    var params = {
+        'TableName': 'users',
+        'Item': {
+            'username': {
+                'S': username
+            },
+            'email': {
+                'S': email
+            }
+        }
+    };
+    dynamo.putItem(params, done);
+}
+
+function getUser(username, done){
+    var params = {
+        'TableName': 'users',
+        'Key': {
+            'username': {
+                'S': username
+            }
+        }
+    };
+    dynamo.getItem(params, done);
+}
+
 describe('Magneto @func', function(){
     beforeEach(function(done){
         if(connected === false){
@@ -76,31 +103,14 @@ describe('Magneto @func', function(){
             async.series([
                 createTable,
                 function put(callback){
-                    var params = {
-                        'TableName': 'users',
-                        'Item': {
-                            'username': {
-                                'S': 'lucas'
-                            },
-                            'email': {
-                                'S': 'wombats@imlucas.com'
-                            }
-                        }
-                    };
-                    dynamo.putItem(params, callback);
+                    createUser('lucas', 'wombats@imlucas.com', callback);
                 },
                 function get(callback){
-                    var params = {
-                        'TableName': 'users',
-                        'Key': {
-                            'username': {
-                                'S': 'lucas'
-                            }
-                        }
-                    };
-                    dynamo.getItem(params, function(err, data){
+                    getUser('lucas', function(err, data){
                         debug(err, data);
                         assert(data.Item !== undefined);
+                        assert.equal(data.Item.username.S, 'lucas');
+                        assert.equal(data.Item.email.S, 'wombats@imlucas.com');
                         callback(err);
                     });
                 }
