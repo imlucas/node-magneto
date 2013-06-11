@@ -128,12 +128,6 @@ describe('Magneto @func', function(){
             });
         });
 
-        it('should update an item');
-        it('should update an item using adds');
-        it('should delete an item');
-
-
-
 
 
         it('should put an item and get it back', function(done){
@@ -153,6 +147,10 @@ describe('Magneto @func', function(){
                 }
             ], done);
         });
+
+        it('should update an item');
+        it('should update an item using adds');
+        it('should delete an item');
     });
 
     describe('Validation', function(){
