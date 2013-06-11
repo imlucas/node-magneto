@@ -113,7 +113,20 @@ describe('Magneto @func', function(){
                 });
             });
         });
-        it('should describe a table');
+        it('should describe a table', function(done){
+            createTable(function(err, data){
+                if(err){
+                    return done(err);
+                }
+                dynamo.describeTable({'TableName': 'users'}, function(err, data){
+                    if(err){
+                        return done(err);
+                    }
+                    assert.equal(data.Table.TableName, 'users');
+                    done();
+                });
+            });
+        });
 
         it('should update an item');
         it('should update an item using adds');
