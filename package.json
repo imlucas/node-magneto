@@ -30,7 +30,7 @@
     "debug": "0.7.2"
   },
   "devDependencies": {
-    "mocha": "1.7.4",
+    "mocha": "1.10.0",
     "aws-sdk": "1.2.0"
   },
   "optionalDependencies": {},
