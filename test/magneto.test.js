@@ -2,7 +2,6 @@
 
 var assert = require("assert"),
     async = require('async'),
-    plog = require('plog'),
     magneto = require('../'),
     util = require('util'),
     debug = require('debug')('magneto:test'),
@@ -138,7 +137,6 @@ describe('Magneto @func', function(){
                 },
                 function get(callback){
                     getUser('lucas', function(err, data){
-                        debug(err, data);
                         assert(data.Item !== undefined);
                         assert.equal(data.Item.username.S, 'lucas');
                         assert.equal(data.Item.email.S, 'wombats@imlucas.com');
@@ -148,14 +146,80 @@ describe('Magneto @func', function(){
             ], done);
         });
 
-        it('should update an item');
-        it('should update an item using adds');
-        it('should delete an item');
+        it('should update an item', function(done){
+            async.series([
+                createTable,
+                function put(callback){
+                    createUser('lucas', 'wombats@imlucas.com', callback);
+                },
+                function update(callback){
+                    var params = {
+                        'TableName': 'users',
+                        'Key': {
+                            'username': {
+                                'S': 'lucas'
+                            }
+                        },
+                        'AttributeUpdates': {
+                            'email': {
+                                'Action': 'PUT',
+                                'Value': {
+                                    'S': 'kangaroos@imlucas.com'
+                                }
+                            }
+                        }
+                    };
+                    dynamo.updateItem(params, callback);
+                },
+                function get(callback){
+                    getUser('lucas', function(err, data){
+                        assert(data.Item !== undefined);
+                        assert.equal(data.Item.username.S, 'lucas');
+                        assert.equal(data.Item.email.S, 'kangaroos@imlucas.com');
+                        callback(err);
+                    });
+                }
+            ], done);
+        });
+
+        it('should delete an item', function(done){
+            async.series([
+                createTable,
+                function put(callback){
+                    createUser('lucas', 'wombats@imlucas.com', callback);
+                },
+                function get(callback){
+                    getUser('lucas', function(err, data){
+                        assert(data.Item !== undefined);
+                        assert.equal(data.Item.username.S, 'lucas');
+                        assert.equal(data.Item.email.S, 'wombats@imlucas.com');
+                        callback(err);
+                    });
+                },
+                function remove(callback){
+                    var params = {
+                        'TableName': 'users',
+                        'Key': {
+                            'username': {
+                                'S': 'lucas'
+                            }
+                        }
+                    };
+                    dynamo.deleteItem(params, callback);
+                },
+                function getAgain(callback){
+                    getUser('lucas', function(err, data){
+                        assert(data.Item === undefined);
+                        callback(err);
+                    });
+                }
+            ], done);
+        });
     });
 
     describe('Validation', function(){
-        it('should raise a validation error trying to update a string set with duplicates');
-        it('should raise a validation error trying to insert duplicates in a string set');
+        // it('should raise a validation error trying to update a string set with duplicates');
+        // it('should raise a validation error trying to insert duplicates in a string set');
         //     it("should raise a validation error trying to insert duplicates in a string set", function(done){
         //         sequence().then(function(next){
         //             // Create a table
@@ -738,8 +802,5 @@ describe('Magneto @func', function(){
     //             });
     //         });
     //     });
-
-
-
     // });
 });
