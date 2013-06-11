@@ -88,6 +88,21 @@ describe('Magneto @func', function(){
                         }
                     };
                     dynamo.putItem(params, callback);
+                },
+                function get(callback){
+                    var params = {
+                        'TableName': 'users',
+                        'Key': {
+                            'username': {
+                                'S': 'lucas'
+                            }
+                        }
+                    };
+                    dynamo.getItem(params, function(err, data){
+                        debug(err, data);
+                        assert(data.Item !== undefined);
+                        callback(err);
+                    });
                 }
             ], done);
         });
