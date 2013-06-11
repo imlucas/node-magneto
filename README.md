@@ -22,15 +22,14 @@ Very handy for just getting to know dynamo or making your tests easier to deal w
 [see issues](https://github.com/exfm/node-magneto/issues)
 
 
-Use [exfm's dynamo fork](https://github.com/exfm/dynamo).
+To use in testing with the official AWS SDK
 
-    var dynamo = require('dynamo'),
-    client = dynamo.createClient();
-    client.useSession = false;
+    var aws = require('aws-sdk'),
+        magneto = require('magneto');
 
-    var db = client.get('us-east-1');
-        db.host = 'localhost';
-        db.port = 8080;
+    magneto.patchClient(aws);
+
+
 
 For more examples, have a look at the [tests](https://github.com/exfm/node-magneto/blob/master/test/magneto.test.js).
 
