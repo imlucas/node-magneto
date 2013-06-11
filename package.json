@@ -18,7 +18,7 @@
     "database"
   ],
   "scripts": {
-    "test": "./node_modules/.bin/mocha"
+    "test": "DEBUG=magneto:* ./node_modules/.bin/mocha"
   },
   "bin": {
     "magneto": "./bin/magneto"
@@ -26,7 +26,10 @@
   "dependencies": {
     "nub": "0.0.0",
     "express": "3.1.0",
-    "plog": "0.0.4"
+    "plog": "0.0.4",
+    "aws-sdk": "~1.2.0",
+    "async": "~0.2.9",
+    "debug": "~0.7.2"
   },
   "devDependencies": {
     "sequence": "2.2.1",
