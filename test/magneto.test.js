@@ -5,27 +5,38 @@ var assert = require("assert"),
     plog = require('plog'),
     magneto = require('../'),
     util = require('util'),
-    debug = require('debug')('magneto:test');
+    debug = require('debug')('magneto:test'),
+    aws = require('aws-sdk');
 
+magneto.patchClient(aws);
 
 var connected = false;
-
-plog.find(/magneto*/)
-    .file('magneto-test.log')
-    .level('silly')
-    .remove('console');
-
-var aws = require('aws-sdk');
-
-aws.config.update({
-    'accessKeyId': 'AKID',
-    'secretAccessKey': 'SECRET',
-    'region': 'us-east-1'
-});
-
 var dynamo = new aws.DynamoDB();
-dynamo.setEndpoint('http://localhost:8080');
 
+function createTable(done){
+    var params = {
+        'TableName': 'users',
+        'KeySchema': [
+            {
+                'AttributeName': 'username',
+                'KeyType': 'HASH'
+            }
+        ],
+        'AttributeDefinitions': [
+            {
+                'AttributeName': 'username',
+                'AttributeType': 'S'
+            }
+        ],
+        'LocalSecondaryIndexes': [],
+        'ProvisionedThroughput': {
+            'ReadCapacityUnits': 5,
+            'WriteCapacityUnits': 5
+        }
+    };
+
+    dynamo.createTable(params, done);
+}
 
 describe('Magneto @func', function(){
     beforeEach(function(done){
@@ -40,51 +51,46 @@ describe('Magneto @func', function(){
         }
     });
 
-    // afterEach(function(done){
+    afterEach(function(done){
+        dynamo.deleteTable({'TableName': 'users'}, function(err){
+            done();
+        });
+    });
 
-    //     // db.get('myTable').destroy(function(err){
-    //         done();
-    //     // });
-    // });
+    describe('Table', function(){
+        it('should create tables', function(done){
+            createTable(function(err, data){
+                if(err){
+                    return done(err);
+                }
+                assert(data.TableDescription.CreationDateTime, 'should have a creation date');
+                assert.equal(data.TableDescription.ItemCount, 0, 'should be empty');
+                assert.equal(data.TableDescription.ProvisionedThroughput.ReadCapacityUnits, 5);
+                assert.equal(data.TableDescription.ProvisionedThroughput.WriteCapacityUnits, 5);
+                assert.equal(data.TableDescription.TableStatus, 'ACTIVE');
+                done();
+            });
+        });
 
-    describe('Create', function(){
-        it('should work', function(done){
+        it('should put an item and get it back', function(done){
             async.series([
-                function create(callback){
-                    dynamo.createTable({
-                        'TableName': 'myTable',
-                        'KeySchema': [
-                            {
-                                'AttributeName': 'username',
-                                'KeyType': 'HASH'
+                createTable,
+                function put(callback){
+                    var params = {
+                        'TableName': 'users',
+                        'Item': {
+                            'username': {
+                                'S': 'lucas'
+                            },
+                            'email': {
+                                'S': 'wombats@imlucas.com'
                             }
-                        ],
-                        'AttributeDefinitions': [
-                            {
-                                'AttributeName': 'username',
-                                'AttributeType': 'S'
-                            }
-                        ],
-                        'LocalSecondaryIndexes': [],
-                        'ProvisionedThroughput': {
-                            'ReadCapacityUnits': 5,
-                            'WriteCapacityUnits': 5
                         }
-                    }, function(err, data){
-                        if(err){
-                            return callback(err);
-                        }
-                        assert(data.TableDescription.CreationDateTime, 'should have a creation date');
-                        assert.equal(data.TableDescription.ItemCount, 0, 'should be empty');
-                        assert.equal(data.TableDescription.ProvisionedThroughput.ReadCapacityUnits, 5);
-                        assert.equal(data.TableDescription.ProvisionedThroughput.WriteCapacityUnits, 5);
-                        assert.equal(data.TableDescription.TableStatus, 'ACTIVE');
-                        callback();
-                    });
+                    };
+                    dynamo.putItem(params, callback);
                 }
             ], done);
         });
-
     });
 
 
