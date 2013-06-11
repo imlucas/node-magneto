@@ -71,12 +71,20 @@ describe('Magneto @func', function(){
                             'WriteCapacityUnits': 5
                         }
                     }, function(err, data){
-                        debug('Create returned', err, data);
-                        callback(err);
+                        if(err){
+                            return callback(err);
+                        }
+                        assert(data.TableDescription.CreationDateTime, 'should have a creation date');
+                        assert.equal(data.TableDescription.ItemCount, 0, 'should be empty');
+                        assert.equal(data.TableDescription.ProvisionedThroughput.ReadCapacityUnits, 5);
+                        assert.equal(data.TableDescription.ProvisionedThroughput.WriteCapacityUnits, 5);
+                        assert.equal(data.TableDescription.TableStatus, 'ACTIVE');
+                        callback();
                     });
                 }
             ], done);
         });
+
     });
 
 
