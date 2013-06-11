@@ -99,6 +99,30 @@ describe('Magneto @func', function(){
             });
         });
 
+        it('should list tables', function(done){
+            createTable(function(err, data){
+                if(err){
+                    return done(err);
+                }
+                dynamo.listTables({}, function(err, data){
+                    if(err){
+                        return done(err);
+                    }
+                    assert.deepEqual(data.TableNames, ['users']);
+                    done();
+                });
+            });
+        });
+        it('should describe a table');
+
+        it('should update an item');
+        it('should update an item using adds');
+        it('should delete an item');
+
+
+
+
+
         it('should put an item and get it back', function(done){
             async.series([
                 createTable,
@@ -116,6 +140,76 @@ describe('Magneto @func', function(){
                 }
             ], done);
         });
+    });
+
+    describe('Validation', function(){
+        it('should raise a validation error trying to update a string set with duplicates');
+        it('should raise a validation error trying to insert duplicates in a string set');
+        //     it("should raise a validation error trying to insert duplicates in a string set", function(done){
+        //         sequence().then(function(next){
+        //             // Create a table
+        //             db.add({
+        //                 'name': "myTable",
+        //                 'schema': {
+        //                     'id': String,
+        //                     'date': Number
+        //                 },
+        //                 'throughput': {
+        //                     'read': 10,
+        //                     'write': 10
+        //                 }
+        //             }).save(function(err, table){
+        //                 assert.ifError(err);
+        //                 next();
+        //             });
+        //         }).then(function(next){
+        //             db.get('myTable').put({
+        //                 'id': 'lucas', 'date': 1,
+        //                 "tags": ["electronic", "electronic"]
+        //             }).save(function(err, data){
+        //                 assert.equal(err.name, 'com.amazonaws.dynamodb.v20111205#ValidationException');
+        //                 assert.equal(err.statusCode, 400);
+        //                 done();
+        //             });
+        //         });
+        //     });
+
+        //     it("should raise a validation error trying to update a string set with duplicates", function(done){
+        //         sequence().then(function(next){
+        //             // Create a table
+        //             db.add({
+        //                 'name': "myTable",
+        //                 'schema': {
+        //                     'id': String,
+        //                     'date': Number
+        //                 },
+        //                 'throughput': {
+        //                     'read': 10,
+        //                     'write': 10
+        //                 }
+        //             }).save(function(err, table){
+        //                 assert.ifError(err);
+        //                 next();
+        //             });
+        //         }).then(function(next){
+        //             db.get('myTable').put({
+        //                 'id': 'lucas',
+        //                 'date': 1,
+        //                 "tags": ["electronic", "rock", "pop"]
+        //             }).save(function(err, data){
+        //                 next();
+        //             });
+        //         })
+        //         .then(function(next){
+        //             db.get('myTable').get({'id': 'lucas', 'date': 1}).update(function(){
+        //                 this.add("tags", ["electronic"]);
+        //             }).save(function(err, data){
+        //                 assert.equal(err.name, 'com.amazonaws.dynamodb.v20111205#ValidationException');
+        //                 assert.equal(err.statusCode, 400);
+        //                 done();
+        //             });
+        //         });
+        //     });
     });
 
 
@@ -341,71 +435,7 @@ describe('Magneto @func', function(){
     //         });
     //     });
 
-    //     it("should raise a validation error trying to insert duplicates in a string set", function(done){
-    //         sequence().then(function(next){
-    //             // Create a table
-    //             db.add({
-    //                 'name': "myTable",
-    //                 'schema': {
-    //                     'id': String,
-    //                     'date': Number
-    //                 },
-    //                 'throughput': {
-    //                     'read': 10,
-    //                     'write': 10
-    //                 }
-    //             }).save(function(err, table){
-    //                 assert.ifError(err);
-    //                 next();
-    //             });
-    //         }).then(function(next){
-    //             db.get('myTable').put({
-    //                 'id': 'lucas', 'date': 1,
-    //                 "tags": ["electronic", "electronic"]
-    //             }).save(function(err, data){
-    //                 assert.equal(err.name, 'com.amazonaws.dynamodb.v20111205#ValidationException');
-    //                 assert.equal(err.statusCode, 400);
-    //                 done();
-    //             });
-    //         });
-    //     });
 
-    //     it("should raise a validation error trying to update a string set with duplicates", function(done){
-    //         sequence().then(function(next){
-    //             // Create a table
-    //             db.add({
-    //                 'name': "myTable",
-    //                 'schema': {
-    //                     'id': String,
-    //                     'date': Number
-    //                 },
-    //                 'throughput': {
-    //                     'read': 10,
-    //                     'write': 10
-    //                 }
-    //             }).save(function(err, table){
-    //                 assert.ifError(err);
-    //                 next();
-    //             });
-    //         }).then(function(next){
-    //             db.get('myTable').put({
-    //                 'id': 'lucas',
-    //                 'date': 1,
-    //                 "tags": ["electronic", "rock", "pop"]
-    //             }).save(function(err, data){
-    //                 next();
-    //             });
-    //         })
-    //         .then(function(next){
-    //             db.get('myTable').get({'id': 'lucas', 'date': 1}).update(function(){
-    //                 this.add("tags", ["electronic"]);
-    //             }).save(function(err, data){
-    //                 assert.equal(err.name, 'com.amazonaws.dynamodb.v20111205#ValidationException');
-    //                 assert.equal(err.statusCode, 400);
-    //                 done();
-    //             });
-    //         });
-    //     });
 
 
     // });
