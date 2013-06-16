@@ -1,9 +1,30 @@
 #!/usr/bin/env node
+"use strict";
 
 var server = require('../lib/server'),
     args = process.argv.slice(1),
-    port = (args.length > 1) ? ~~args[1] : 8080;
+    port = (args.length > 1) ? ~~args[1] : 8080,
+    path = require('path'),
+    fs = require('fs');
 
-server.listen(port, function(){
-    console.log('Magneto listening on ' + port);
-});
+function start(){
+    server.listen(port, function(){
+        console.log('Magneto listening on ' + port);
+    });
+}
+
+if(args[2]){
+    server.DB.saveTo = path.resolve(args[2]);
+    console.log('Will save data to ' + server.DB.saveTo);
+    fs.exists(server.DB.saveTo, function(exists){
+        if(!exists){
+            console.log('Data file doesnt exist.  Starting.');
+            return start();
+        }
+        console.log('Loading data from ' + server.DB.saveTo);
+        server.DB.loadFromDisk(server.DB.saveTo, start);
+    });
+}
+else {
+    start();
+}
