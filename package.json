@@ -2,7 +2,7 @@
   "author": "Lucas Hrabovsky <lucas@ex.fm> (http://imlucas.com)",
   "name": "magneto",
   "description": "A DynamoDB backend in node for testing",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": "http://github.com/exfm/node-magneto",
   "repository": {
     "type": "git",
@@ -27,7 +27,8 @@
     "nub": "0.0.0",
     "express": "3.1.0",
     "async": "0.2.9",
-    "debug": "0.7.2"
+    "debug": "0.7.2",
+    "plog": "0.2.1"
   },
   "devDependencies": {
     "mocha": "1.10.0",
