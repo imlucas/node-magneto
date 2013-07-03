@@ -2,16 +2,9 @@
 
 var assert = require("assert"),
     async = require('async'),
-    magneto = require('../'),
     util = require('util'),
     debug = require('debug')('magneto:test'),
-    aws = require('aws-sdk'),
     helpers = require('./helpers');
-
-magneto.patchClient(aws);
-
-var connected = false;
-var dynamo = new aws.DynamoDB();
 
 function createTable(done){
     var params = {
@@ -35,7 +28,7 @@ function createTable(done){
         }
     };
 
-    dynamo.createTable(params, done);
+    helpers.dynamo.createTable(params, done);
 }
 
 function createUser(username, email, done){
@@ -50,7 +43,7 @@ function createUser(username, email, done){
             }
         }
     };
-    dynamo.putItem(params, done);
+    helpers.dynamo.putItem(params, done);
 }
 
 function getUser(username, done){
@@ -62,7 +55,7 @@ function getUser(username, done){
             }
         }
     };
-    dynamo.getItem(params, done);
+    helpers.dynamo.getItem(params, done);
 }
 
 describe('Magneto @func', function(){
@@ -89,7 +82,7 @@ describe('Magneto @func', function(){
                 if(err){
                     return done(err);
                 }
-                dynamo.listTables({}, function(err, data){
+                helpers.dynamo.listTables({}, function(err, data){
                     if(err){
                         return done(err);
                     }
@@ -103,7 +96,7 @@ describe('Magneto @func', function(){
                 if(err){
                     return done(err);
                 }
-                dynamo.describeTable({'TableName': 'users'}, function(err, data){
+                helpers.dynamo.describeTable({'TableName': 'users'}, function(err, data){
                     if(err){
                         return done(err);
                     }
@@ -155,7 +148,7 @@ describe('Magneto @func', function(){
                             }
                         }
                     };
-                    dynamo.updateItem(params, callback);
+                    helpers.dynamo.updateItem(params, callback);
                 },
                 function get(callback){
                     getUser('lucas', function(err, data){
@@ -191,7 +184,7 @@ describe('Magneto @func', function(){
                             }
                         }
                     };
-                    dynamo.deleteItem(params, callback);
+                    helpers.dynamo.deleteItem(params, callback);
                 },
                 function getAgain(callback){
                     getUser('lucas', function(err, data){
