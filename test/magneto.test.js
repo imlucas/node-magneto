@@ -5,7 +5,8 @@ var assert = require("assert"),
     magneto = require('../'),
     util = require('util'),
     debug = require('debug')('magneto:test'),
-    aws = require('aws-sdk');
+    aws = require('aws-sdk'),
+    helpers = require('./helpers');
 
 magneto.patchClient(aws);
 
@@ -65,23 +66,8 @@ function getUser(username, done){
 }
 
 describe('Magneto @func', function(){
-    beforeEach(function(done){
-        if(connected === false){
-            magneto.listen(8080, function(){
-                connected = true;
-                done();
-            });
-        }
-        else{
-            done();
-        }
-    });
-
-    afterEach(function(done){
-        dynamo.deleteTable({'TableName': 'users'}, function(err){
-            done();
-        });
-    });
+    beforeEach(helpers.beforeEach);
+    afterEach(helpers.afterEach);
 
     describe('Table', function(){
         it('should create tables', function(done){
