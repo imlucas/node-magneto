@@ -23,6 +23,7 @@
   "bin": {
     "magneto": "./bin/magneto"
   },
+  "license" : "MIT",
   "dependencies": {
     "nub": "0.0.0",
     "express": "3.1.0",
