@@ -28,7 +28,7 @@
     "nub": "0.0.0",
     "express": "3.1.0",
     "async": "0.2.9",
-    "debug": "0.7.2"
+    "debug": "2.6.9"
   },
   "devDependencies": {
     "mocha": "1.10.0",
