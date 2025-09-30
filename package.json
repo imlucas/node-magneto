@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "mocha": "1.10.0",
-    "aws-sdk": "1.2.0"
+    "aws-sdk": "2.814.0"
   },
   "optionalDependencies": {},
   "engines": {
